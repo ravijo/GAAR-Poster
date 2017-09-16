@@ -1,0 +1,182 @@
+\documentclass[a0paper,portrait]{baposter}
+
+\usepackage{wrapfig}
+\usepackage{lmodern}
+
+\usepackage[utf8]{inputenc} % unicode support
+\usepackage[T1]{fontenc}
+
+\usepackage[whole]{bxcjkjatype} % for Japanese language
+
+\selectcolormodel{cmyk}
+\graphicspath{{figures/}} % Directory in which figures are stored
+
+\newcommand{\compresslist}{%
+\setlength{\itemsep}{0pt}%
+\setlength{\parskip}{1pt}%
+\setlength{\parsep}{0pt}}
+
+\newcommand{\heading}[1]{\textbf{\color{darkgreen}#1}} % highlight text with darkgreen color
+
+\newenvironment{boenumerate}
+{\begin{enumerate}\renewcommand\labelenumi{\textbf\theenumi.}}
+{\end{enumerate}}
+
+\begin{document}
+\definecolor{darkgreen}{cmyk}{0.8,0,0.8,0.45}
+\definecolor{lightgreen}{cmyk}{0.8,0,0.8,0.25}
+
+\begin{poster}{
+		grid=false,
+		columns=2, %number of columns
+		headerborder=open, % Adds a border around the header of content boxes
+		colspacing=1em, % Column spacing
+		bgColorOne=white, % Background color for the gradient on the left side of the poster
+		bgColorTwo=white, % Background color for the gradient on the right side of the poster
+		borderColor=darkgreen, % Border color
+		headerColorOne=lightgreen, % Background color for the header in the content boxes (left side)
+		headerColorTwo=lightgreen, % Background color for the header in the content boxes (right side)
+		headerFontColor=white, % Text color for the header text in the content boxes
+		boxColorOne=white, % Background color of the content boxes
+		textborder=rounded, %rectangle, % Format of the border around content boxes, can be: none, bars, coils, triangles, rectangle, rounded, roundedsmall, roundedright or faded
+		eyecatcher=false, % Set to false for ignoring the left logo in the title and move the title left
+		headerheight=0.11\textheight, % Height of the header
+		headershape=rounded, % Specify the rounded corner in the content box headers, can be: rectangle, small-rounded, roundedright, roundedleft or rounded
+		headershade=plain,
+		headerfont=\Large\textsf, % Large, bold and sans serif font in the headers of content boxes
+		linewidth=2pt % Width of the border lines around content boxes
+	}{}
+	%----------------------------------------------------------------------------------------
+	%	TITLE AND AUTHOR NAME
+	%----------------------------------------------------------------------------------------
+	{\vspace{1em}
+		\textsf %Sans Serif
+		{Robotic Cloth Manipulation for Clothing Assistance Task using Dynamic Movement Primitives}
+	} % Poster title
+	{\sf\vspace{0.1em}\\
+		Ravi Prakash Joshi (柴田 研究室)
+		\vspace{0.1em}\\
+		\small{国立大学法人 九州工業大学 大学院生命体工学研究科, 〒808-0196 北九州市若松区ひびきの2番4号}}
+	{\includegraphics[trim={5mm 5mm 30mm 10mm}, clip, width=4cm]{logo}} % University/lab logo
+
+
+	\headerbox{Introduction}{name=introduction,column=0,row=0, span=2}{
+		高齢者および障がい者の日常生活において着衣は不可欠な援助活動の1つであるため, ロボット介助 の分野においてこの需要は年々増加している. 本研究で扱うタスクはロボットがマネキンの両腕に衣服を通すことである.
+
+		私たちは着衣支援におけるタスクパラメータ化モデルとしてDMP (Dynamic Movement Primitives)の適応可能性を検討した.
+	}
+
+	\headerbox{Experimental System}{name=setup,column=0,below=introduction,span=1}{
+		\begin{wrapfigure}{l}{0.5\textwidth}
+			\begin{center}
+				\includegraphics[width=\linewidth]{setup}
+			\end{center}
+		\end{wrapfigure}
+
+		\hspace{1mm}
+		\begin{center}
+			\begin{itemize}\compresslist
+				\item Baxter Robot
+				\item 衣服
+				\item Kinect v2
+				\item マネキン
+			\end{itemize}
+		\end{center}
+		\vspace{10mm}
+	}
+
+
+	\headerbox{Experiments}{name=experiments,column=0,below=setup,span=1}{
+		\begin{enumerate}\compresslist
+			\item Dynamic Movement Primitives (DMP)
+			\item DMPを用いたロボットによる衣服操作 %Robotic Cloth Manipulation using DMP
+			\item 3次元空間から手の位置を推定する %Estimation of Hand location in 3D space
+		\end{enumerate}
+	}
+
+	\headerbox{Dynamic Movement Primitives (DMP)}{name=dmp,column=0,below=experiments,span=1}{
+		実システム導出のための制御信号生成に用いた %Used for generating control signal to guide real system
+		\begin{boenumerate}
+			\item 非線形動的システムとしてポリシーを表現する %Represent policy as a non-linear dynamical system
+			\item[] {\hspace{1cm} $\ddot{y} = \alpha_y ( \beta_y (g - y) - \dot{y}) + f$}
+			\item[] {\hspace{1cm} $f(x,g) = \frac{\Sigma_{i=1}^N \psi_i w_i}{\Sigma_{i=1}^N \psi_i} x(g - y_0)$ where $\dot{x} = -\alpha_x x$}
+			\item \textbf{Policy parameters:} 重みパラメータ $w_i$ は Locally Weighted Regression にて用いられる %Weight parameters $w_i$ used in Locally Weighted Regression
+		\end{boenumerate}
+
+		\begin{center}
+			\includegraphics[trim={0 10px 0 10px}, clip, width=\textwidth]{dmp_lwr_example}
+		\end{center}
+
+		\begin{center}
+			\heading{Effect of \textit{no. of basis functions}}
+			\includegraphics[trim={0 15px 0 22px}, clip, width=0.9\textwidth]{DMP_BFs}
+
+			\heading{DMP adaptation to new goal}
+			\includegraphics[trim={0 14px 0 22px}, clip, width=0.9\textwidth]{DMP_Goal}
+		\end{center}
+	}
+
+
+	\headerbox{Robotic Cloth Manipulation using DMP}{name=rcm,column=1,below=introduction,span=1}{
+		\begin{center}
+			\includegraphics[width=\textwidth]{flowchart_beamer_jp}
+		\end{center}
+
+		\vspace{0.1pt}
+		\begin{center}
+			%\heading{Accuracy measurement}
+			\heading{精度測定}
+		\end{center}
+
+		\begin{center}
+			\includegraphics[width=0.44\textwidth]{inclination_plus}%continue to same line
+			\includegraphics[width=0.55\textwidth]{success_rate}
+		\end{center}
+	}
+
+
+	\headerbox{Estimation of Hand location in 3D space}{name=estimation,column=1,below=rcm,span=1}{
+		% https://tex.stackexchange.com/a/84148
+		\tikzfading[name=arrowfading, top color=transparent!0, bottom color=transparent!95]
+		\tikzset{arrowfill/.style={#1,general shadow={fill=black, shadow yshift=-0.8ex, path fading=arrowfading}}}
+		\tikzset{arrowstyle/.style n args={3}{draw=#2,arrowfill={#3}, single arrow,minimum height=#1, minimum width=2cm, single arrow,
+			single arrow head extend=.3cm,}}
+
+		% https://tex.stackexchange.com/a/376283
+		\begin{center}
+			\begin{tikzpicture}
+				\node(a){\includegraphics[width=0.3\textwidth]{wrist_images}};
+				\node at (a.east)%
+				[anchor=center,
+					xshift=60mm,
+					yshift=0mm
+					]{\includegraphics[width=0.3\textwidth]{wrist_detection_output}};
+						\node at (a.east)[xshift=20mm, arrowstyle={3cm}{FireBrick}{top color=OrangeRed!20, bottom color=Red}] {Template Matching};
+					\end{tikzpicture}
+				\end{center}
+			}
+
+			\headerbox{Conclusion}{name=conclusion,column=1,below=estimation,span=1}{
+				\begin{boenumerate}\compresslist
+					\item ロボットによる着衣支援は協力的な操作を必要とするため困難である %Robotic clothing assistance is challenging since it requires cooperative manipulation
+					\item 衣服は非剛体であるため変形性が非常に高い %Clothing article inherits non-rigid and highly deformable properties
+					\item アプローチをよりロバストにするためにリアルタイム追跡(が必要?)
+ %Real-time tracking of mannequin for making approach more robust
+					\item 実験結果は DMP は移動軌跡を一般化可能であることを示す %Result shows that DMPs are able to generalize the movement trajectory
+				\end{boenumerate}
+			}
+
+			\headerbox{Acknowledgments}{name=acknowledgments,column=1,below=conclusion,span=1}{
+				本研究はJSPS科研費 JP16H01749 の助成を受けたものです. %This work was supported in part by the Grant-in-Aid for Scientific Research from Japan Society for the Promotion of Science (No. 16H01749).
+			}
+
+			\headerbox{Publications}{name=publications,column=0,below=dmp,span=1}{
+				\footnotesize % Reduce the font size in this block
+				\renewcommand{\section}[2]{\vskip 0.05em} % Get rid of the default "References" section title
+				\nocite{*} % Insert publications even if they are not cited in the poster
+
+				\bibliographystyle{unsrt}
+				\bibliography{poster} % Use sample.bib as the bibliography file
+			}
+		\end{poster}
+\end{document}
